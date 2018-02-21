@@ -1,0 +1,91 @@
+{% extends "navlayout.html" %}
+{% block head %}
+	{{super()}}
+{% endblock %}
+
+{% block content %}
+<style>
+	#article-wrap{
+		max-width: 720px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	#comment-wrap{
+		max-width: 720px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	#comments{
+		margin-top: 20px;
+	}
+	.comment-writer{
+		font-size:18px;
+		margin-right: 20px;
+		font-style: italic;
+	}
+	.comment-time{
+		color: #a6a6a6;
+		font-style: italic;
+	}
+	.comment-content{
+		font-size: 16px;
+		margin-top: 10px;
+	}
+	#article-writer{
+		font-size: 16px;
+		font-style: italic;
+		color: dimgray;
+	}
+	#article-time{
+		color: #a6a6a6;
+	}
+	form{
+		max-width: 400px;
+	}
+	h1{font-size: 36px;}
+	h3{margin-top: 40px;}
+	article{font-size: 18px;}
+</style>
+	<div class="container">
+		<div id="article-wrap">
+			<h1>{{ article.title }}</h1>
+				<span id="article-writer">{{ article.writer }}</span> 
+				&nbsp / &nbsp 
+				<span id="article-time">{{ article.add_time }}</span>
+			<hr>
+			<article>
+				{{ article.content | safe }}
+			</article>
+			<hr>
+		</div>
+
+		<div id="comment-wrap">
+			
+				{% if comments %}
+					{% for comment in comments %}
+					<div id="comments">
+						<span class="comment-writer">{{ comment.writer }}</span>
+						<span class="comment-time">{{ comment.add_time }}</span>
+						<p class="comment-content">{{ comment.content }}</p>
+					</div>
+					{% endfor %}
+				{% endif %}
+
+			<h3>发表评论</h3>
+				<form method="POST" action="{{ url_for('homeView.article_comment', article_id=article.id) }}">
+	    			{{ form.csrf_token }}
+	    			<div class="form-group">
+	    				{{ form.writer.label }} {{ form.writer(size=20, class="form-control") }}
+	    			</div>
+	    			<div class="form-group">
+	    				{{ form.writer_email.label }} {{ form.writer_email(size=20,class="form-control") }}
+	    			</div>
+	    			<div class="form-group">
+	    				{{ form.content.label }} 
+	    				{{ form.content(size=120, class="form-control") }}
+	    			</div>
+	    			<input type="submit" class="btn btn-default" value="submit">
+				</form>
+		</div>
+	</div>
+{% endblock %}

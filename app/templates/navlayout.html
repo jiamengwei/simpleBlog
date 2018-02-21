@@ -1,0 +1,24 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/Normalize.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+{% block title %}博客{% endblock %}
+{% block body %}
+	<div class="container">
+		<header id="header">
+			<a id="blog-title" href="{{url_for('homeView.index')}}">{% if blogName %}{{blogName}}{% else %}SimpleBlog{% endif %}</a>
+			<nav>
+				<a href="#">主页</a>
+				<a href="#">关于</a>
+			</nav>
+		</header>
+		{% block content %}
+
+		{% endblock %}
+		<footer>
+			<p>© Copyright 2007 - 2018 by JiaMengwei.</p>
+		</footer>
+	</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="logon" method="POST">
+        {{ form.csrf_token }}
+        {{ form.nickname.label }} {{ form.nickname(size=20) }}
+        {{ form.email.label }} {{ form.email(size=20) }}
+        {% if error %}
+            <strong>Error:</strong> {{error}}
+        {% endif %}
+        {{ form.password.label }} {{ form.password(size=20) }}
+        <input type="submit" value="ok">
+    </form>        
+</body>
+</html>

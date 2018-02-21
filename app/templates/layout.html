@@ -1,0 +1,62 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}This is an example page{% endblock %}
+{% block styles %}
+{{super()}}
+    <style lang="">
+        .alert{
+            height: 30px;
+            line-height: 30px;
+            margin-bottom: -30px;
+            padding: unset;
+            text-align: center;
+        }
+        .container{
+            margin-top: 60px;
+        }
+        .right{
+            float: right !important;
+        }
+        footer{
+            text-align: center;
+            margin-top: 40px;
+            border-top: solid 1px #EEEEEE;
+            padding-top: 40px;
+            padding-bottom: 40px;
+    }       
+    </style>
+{% endblock %}
+
+{% block navbar %}
+  <nav>
+        <ul class="nav nav-tabs">
+            <li><a href="{{ url_for('adminView.admin') }}">概览</a></li>
+            <li><a href="{{ url_for('adminArticleView.article_list',page=1) }}">文章管理</a></li>
+            <li><a href="{{ url_for('adminCategoryView.category') }}">分类管理</a></li>
+            <li><a href="{{ url_for('adminCommentView.comment') }}">评论管理</a></li>
+            <li><a href="wp-admin/setting">设置</a></li>
+            <li class="right"><a href="{{ url_for('adminView.logout') }}">登出</a></li>
+            <li class="right"><a href="#">{{ current_user.nickname }}</a></li>
+      </ul>
+  </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+        {% block footer%}
+            <footer>
+                <p>© Copyright 2007 - 2018 by JiaMengwei. </p>
+            </footer>
+        {% endblock %}
+{% endblock %}
+
+
+

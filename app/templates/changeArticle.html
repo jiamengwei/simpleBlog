@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    .container{
+        max-width: 720px;
+    }
+    #title{
+        height: 60px;
+        font-size: 30px;
+        width: 100%;
+        border-left: none;
+        border-right: ;
+        border-top: none;
+        border-bottom: none;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    #btnAddArticle,#category-select {
+     float: right;
+     margin-top: 10px;
+     margin-left: 10px;
+    }
+    #category-select{
+        width: 100px;
+    }
+</style>
+<div class="container">
+        <input type="text" id="title" value="{{article.title}}" placeholder="请输入标题">
+        <div id="editorSpace">
+            <p>{{ article.content | safe }}</p>
+        </div>
+        <div id="submit-wrap">
+            <input type="button" class="btn btn-default" id="btnAddArticle" value="提交">
+            <select class="form-control" id="category-select">
+                {% for c in categories %}
+                    <option value="{{ c.id }}">{{c.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+</div>
+    {% block footer%}
+        {{super()}}
+    {% endblock %}
+<script src="/static/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="/static/wangeditor/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#editorSpace')
+    editor.customConfig.debug = true;
+    editor.customConfig.uploadImgServer = '{{ url_for('adminArticleView.article_imageUpload') }}';
+    editor.customConfig.customAlert = function (info) {
+        alert('自定义提示：' + info)
+    }
+    editor.customConfig.uploadImgHooks = {
+        before: function (xhr, editor, files) {
+        },
+        success: function (xhr, editor, result) {
+            for (var i = result['imagesUrl'].length - 1; i >= 0; i--) {
+                imgElement = '<img src="http://'+window.location.host+'/'+result['imagesUrl'][i]+'" width="600px">';
+                editor.txt.append(imgElement);
+            }
+        },
+        fail: function (xhr, editor, result) {
+          
+        },
+        error: function (xhr, editor) {
+        },
+        timeout: function (xhr, editor) {
+           
+        },
+        customInsert: function (insertImg, result, editor) {
+            var url = result.url
+            insertImg(url)
+        }
+    }
+    editor.create()
+
+    $(document).ready(function () {
+
+        $('#btnAddArticle').click(function (e) { 
+            e.preventDefault();
+            var title = $("#title").val()
+            var category_id=$('#category-select option:selected').val(); //获取选中的项
+            $.post("{{ url_for('adminArticleView.article_change',id=article.id) }}", 
+            {
+                title:title,
+                content:editor.txt.html(),
+                category_id:category_id
+            },
+                function (data, textStatus, jqXHR) {
+                    if (textStatus=='success') {
+                        $('body').html(data)
+                    }else{
+                        alert('文章添加失败')
+                    }
+                },
+                "html"
+            );
+        });
+    });
+</script>
+{% endblock %}

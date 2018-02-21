@@ -1,0 +1,62 @@
+{% extends 'navlayout.html' %}
+{% block head %}
+	{{super()}}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+{% block content %}
+<div id="content">
+			<div id="category-wrap">
+				<ul>
+					<li><a href="{{url_for('homeView.index')}}" class="btn btn-default btn-sm">全部</a></li>
+					{% for category in categories %}
+					<li><a href="{{url_for('homeView.article_category',category_id=category.id,category_name=category.name,page=1)}}" class="btn btn-default btn-sm">{{ category.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div> 
+			<div id="all-article-wrap">
+			{% for article in articles %}
+				<div class="article-wrap">
+					<h3><a href="{{ url_for('homeView.article_detail',article_id=article.id) }}">{{ article.title }}</a></h3>
+					<ul class="nav-article">
+						<li><a href="#">{{ article.add_time }}</a></li>
+						<li>
+							<a href="#">{{ article.category.name }}</a>
+						</li>
+					</ul>
+					<p>{{ article.content | safe | truncate(120) }}</p>
+				</div>
+			{% endfor %}
+				<div id="nav">
+					<ul class="pagination">
+		                <li>
+		                <a href="{% if pagination.has_prev %} {{url_for('homeView.index', page=pagination.prev_num)}} {%else%}# {%endif%}" aria-label="Previous">
+		                    <span aria-hidden="true">&laquo;</span>
+		                </a>
+		                </li>
+		                {% for page in  pagination.iter_pages() %}
+		                      
+		                    {% if page %}
+		                    {% if page != pagination.page %}
+		                     <li>
+		                        <a href="{{ url_for('homeView.index', page=page) }}">{{ page }}</a>
+		                     </li> 
+		                    {% else %}
+		                    <li class="active">
+		                        <a href="{{ url_for('homeView.index', page=page) }}">{{ page }}</a>
+		                    </li>
+		                    {% endif %}
+		                  {% else %}
+		                    <li><span class=ellipsis>…</span></li>
+		                  {% endif %}
+		                {% endfor %}
+		                <li>
+		                    <a href="{% if pagination.has_next %} {{url_for('homeView.index', page=pagination.next_num)}} {%else%}# {%endif%}" aria-label="Next">
+		                      <span aria-hidden="true">&raquo;</span>
+		                    </a>
+		                </li>
+		            </ul>
+	            </div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

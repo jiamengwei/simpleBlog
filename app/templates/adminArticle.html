@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    #nav{
+    text-align:center;
+}
+</style>
+<div class="container">
+    <h4><a href={{ url_for('adminArticleView.article_add') }}>撰写新文章</a></h4>
+    {% if articles %}
+    <table class="table table-responsive table-bordered table-hover table-condensed"> 
+        <thead>
+            <tr>
+                <th class="col-xs-1 col-sm-1 col-md-1"></th>
+                <th class="col-xs-1 col-sm-1 col-md-1">id</th>
+                <th class="col-xs-2 col-sm-2 col-md-2">标题</th>
+                <th class="col-xs-4 col-sm-4 col-md-4">内容</th>
+                <th class="col-xs-1 col-sm-1 col-md-1">作者</th>
+                <th class="col-xs-2 col-sm-2 col-md-2">时间</th>
+                <th class="col-xs-1 col-sm-1 col-md-1">分类</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <td>
+                    &nbsp;
+                    <a href="{{url_for('adminArticleView.article_change',id=article.id)}}">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="delete/{{ article.id }}">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                </td>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+                <td>{{ article.content | truncate(66,True) | striptags() }}</td>
+                <td>{{ article.writer }}</td>
+                <td>{{ article.add_time }}</td>
+                <td>{{ article.category.name }}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <h2>你还没有写过文章哦 快去写一篇吧</h2>
+    {% endif %}
+        </tbody>
+    </table>
+    <div id="nav">
+            <ul class="pagination">
+                <li>
+                <a href="{% if pagination.has_prev %} {{url_for('adminArticleView.article', page=pagination.prev_num)}} {%else%}# {%endif%}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                </li>
+                {% for page in  pagination.iter_pages() %}
+                      
+                    {% if page %}
+                    {% if page != pagination.page %}
+                     <li>
+                        <a href="{{ url_for('adminArticleView.article_list', page=page) }}">{{ page }}</a>
+                     </li> 
+                    {% else %}
+                    <li class="active">
+                        <a href="{{ url_for('adminArticleView.article_list', page=page) }}">{{ page }}</a>
+                    </li>
+                    {% endif %}
+                  {% else %}
+                    <li><span class=ellipsis>…</span></li>
+                  {% endif %}
+                {% endfor %}
+                <li>
+                    <a href="{% if pagination.has_next %} {{url_for('adminArticleView.article_list', page=pagination.next_num)}} {%else%}# {%endif%}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+</div>
+    {% block footer%}
+        {{super()}}
+    {% endblock %}
+{% endblock %}
