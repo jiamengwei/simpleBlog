@@ -10,15 +10,16 @@ choice = input('please enter a number 1:create_all, 2:drop_all, 3:add lots of ar
 
 if choice == '1':
     try:
-        db.create_all()
-        print('create success')
+        # db.create_all()
+        # print('create success')
         user = User(name = 'admin', password='123456')
         db.session.add(user)
-        category = Category(name ='默认分类', description='一个默认分类')
+        category = Category(name ='default', description='a default category')
         db.session.add(category)
         setting = Setting()
         db.session.add(setting)
         db.session.commit()
+        print('add ok')
     except Exception as e :
         print(e)
 elif choice == '2':
