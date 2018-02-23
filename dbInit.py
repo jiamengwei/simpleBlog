@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # -*- coding: utf-8 -*-
 from app.model import*
 from app import create_app
@@ -8,7 +8,7 @@ app.test_request_context().push()
 
 choice = input('please enter a number 1:create_all, 2:drop_all, 3:add lots of articles :')
 
-if(choice == '1'):
+if choice == '1':
     try:
         db.create_all()
         print('create success')
@@ -21,13 +21,14 @@ if(choice == '1'):
         db.session.commit()
     except Exception as e :
         print(e)
-elif(choice == '2'):
-    try:  
+elif choice == '2':
+    try:
+        print('22222222222')
         db.drop_all()
         print('drop success')
     except Exception as e:
         print(e)
-elif(choice == '3'):
+elif choice == '3':
     writer = '保罗'
     n = 200
     while n > 0:
