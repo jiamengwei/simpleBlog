@@ -6,12 +6,14 @@ from category.view import adminCategoryView
 from comment.view import adminCommentView
 from home.view import homeView
 from model import User, Setting, Article, Category, db
+from werkzeug.contrib.fixers import ProxyFix
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.filter_by(id=id).first()
 
 app = create_app()
+app.wsgi_app = ProxyFix(app.wsgi_app)
 app.register_blueprint(homeView)
 app.register_blueprint(adminView)
 app.register_blueprint(adminArticleView, url_prefix='/wp-admin/article')
@@ -25,6 +27,5 @@ def image_upload(imageName):
 	return resp
 
 if __name__ == '__main__':
-	from werkzeug.contrib.fixers import ProxyFix
-	app.wsgi_app = ProxyFix(app.wsgi_app)
+	
 	app.run()

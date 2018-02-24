@@ -22,7 +22,6 @@ def article_category(category_name,page):
 	categories = Category.query.all()
 	return render_template('categoryArticles.html', articles=articles, pagination=pagination, categories=categories, category_name=category_name)
 
-
 @homeView.route('/article/<article_id>')
 def article_detail(article_id):
 	form = CommentForm()
