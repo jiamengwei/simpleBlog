@@ -7,7 +7,7 @@ from app import login_manager
 adminView = Blueprint('adminView', __name__,
                         template_folder='templates')
 
-@adminView.route('/wp-admin/')
+@adminView.route('/wp-admin')
 def admin():
     if not current_user.is_authenticated:
         return redirect(url_for('adminView.login'))
@@ -40,11 +40,12 @@ def login():
         user = User.query.filter_by(name=form.name.data, password=form.password.data).first()
         if user:
             login_user(user)
+            print('asdfsdf')
             return redirect(url_for('adminView.admin'))
     return render_template('login.html', form = form)
 
 
-@adminView.route('/logout/')
+@adminView.route('/logout')
 @login_required
 def logout():
     logout_user()
